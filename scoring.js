@@ -1,97 +1,100 @@
-// DOMの読み込みが終わったらfunction()の中の処理を実行します。
+// After loading the DOM, execute the processing in function()
 $(document).ready(function(){
-  // [国語の点数,英語の点数,数学の点数,理科の点数,社会の点数]の入力値を取得して合計点と平均点を出すロジックを作ります。
-  function score_indicate(subject_points){
-    // 変数「subject_points」に
-    // [国語の点数,英語の点数,数学の点数,理科の点数,社会の点数]の配列を代入します。
+// Create a logic that gets the input values of [Japanese score, English score, math score, science score, social score] and gives the total score and average score.
+  function score_indicate(){
+    // In the variable "subject_points"
+      // Substitute the array of [Japanese score, English score, math score, science score, social score].
     let subject_points = [Number($('#national_language').val()),
                           Number($('#english').val()),
                           Number($('#mathematics').val()),
                           Number($('#science').val()),
                           Number($('#society').val())
                           ];
-    // 変数「sum」に
-    // [国語の点数,英語の点数,数学の点数,理科の点数,社会の点数]をそれぞれ足します。
-    // ヒント! 配列を一つずつ取り出して足していきます。
+    // In the variable "sum"
+    // Add [Japanese score, English score, math score, science score, social score] respectively.
+    // Hint! Take out the arrays one by one and add them.
     let sum = subject_points[0];
     sum = sum + subject_points[1];
     sum = sum + subject_points[2];
     sum = sum + subject_points[3];
     sum = sum + subject_points[4];
-    // 「合計点：」(id="sum_indicate")に変数「sum」(合計点)を出力させます。
+    // another way to calculate sum is as follows:
+    // let sum =subject_points. the reduce(function( sum, subject_points) {return sum + subject_points;}, 0);
+    // Output the variable "sum" (total score) to "total score:" (id = "sum_indicate").
     $("#sum_indicate").text(sum);
-    // 変数「average」に
-
+    // In the variable "average"
+    // Calculate the average value and substitute. (Total score of the number you want to average (sum) / Total number)
     let average = sum / subject_points.length;
     $("#average_indicate").text(average);
-    // 平均値を出して代入します。(平均をとりたい数の合計点数(sum) / 全体の個数)
-    // ヒント! 全体の個数はlengthメソッドを使って求めます。(lengthメソッド: 文字列の長さや配列の要素数などを取得するメソッド)
+    // Hint! Use the length method to find the total number. (length method: Method to get the length of the string, the number of elements in the array, etc.)
   };
-  // 平均点数を取得し、取得した平均点数からランク分け("A", "B", "C", "D")をするロジックを作ります。
+  // Get the average score and create the logic to rank ("A", "B", "C", "D") from the obtained average score.
   function get_achievement(subject_points){
-    // 変数「averageIndicate」に
-    // 平均点数をHTML上のid="average_indicate"から取得して代入します。
-    let averageIndicate = $("#average_indicate").text(average);
+    // In the variable "averageIndicate"
+    // Get the average score from id = "average_indicate" on HTML and substitute it.
+    let averageIndicate = $("#average_indicate").text();
     console.log(averageIndicate)
-    // もし「averageIndicate」が80以上なら"A"を返します。
-    if ( averageIndicate >= 80) {
+    // If "averageIndicate" is 80 or higher, "A" is returned.
+    if ( averageIndicate >= 80){
       return "A";
-      // もし「averageIndicate」が60以上なら"B"を返します。
+      // If "averageIndicate" is 60 or more, "B" is returned.
     } else if ( averageIndicate >= 60) {
       return "B";
-      // もし「averageIndicate」が40以上なら"C"を返します。
-    } else if (averageIndicate >= 40) {
+      // If "averageIndicate" is 40 or more, "C" is returned.
+    } else if ( averageIndicate >= 40) {
       return "C";
-      // もし「averageIndicate」がそれ以外の点数なら"D"を返します。
+    // If "averageIndicate" is any other score, "D" is returned.
     } else {
       return "D";
     }
   };
-  // 各教科の点数を取得し、取得した点数から合格/不合格の判断を下すロジックを作ります。
-  function get_pass_or_failure(subject_points){
+  // Get the score of each subject and make the logic to judge pass / fail from the obtained score.
+  function get_pass_or_failure(){
     let subject_points = [Number($('#national_language').val()),
                           Number($('#english').val()),
                           Number($('#mathematics').val()),
                           Number($('#science').val()),
-                          Number($('#でciety').val())
+                          Number($('#society').val())
                           ];
-    // 変数「number」に入力した教科の数を代入します。
+  // Substitute the number of subjects entered in the variable "number".
     let number = subject_points.length;
-    // 変数「judge」に"合格"を代入しておきます。
-    let judge = "Pass";
-    for(let i=0; i<number; i++){
-      if(subject_points[i]<60){
-        judge = " Fail " ;
-         break ;
-      }
+    // Assign "pass" to the variable "judge".
+    let judge = "pass";
+    // If the score of each subject entered is lower than 60 points, "Judge" is reassigned to the variable "judge" and "judge" is returned.
+    // Hint! Try searching for "javascript score pass / fail logic".
+    for (let i=0; i<number; i++){
+        if (subject_points[i]<60){
+          judge = "Fail" ;
+           break ;
+        }
     }
-    return judge;
-    // 入力したそれぞれの教科の点数が60点よりも低いと変数「judge」に"不合格"を再代入して「judge」を返します。
-    // ヒント! 「javascript 点数 合格 不合格 ロジック」で検索してみてください。
-  };
-  // 最終的なジャッジのロジックを作ります。
-  function judgement(subject_points){
-    // 変数「achievement」に「get_achievement()の戻り値」を代入します。
-    let achievement = get_achievement(subject_points);
-    // 変数「pass_or_failure」に「get_pass_or_failure()の戻り値」を代入します。
-    let pass_or_failure = get_pass_or_failure(subject_points);
-    // 「最終ジャッジ」(id="alert-indicate)ボタンを押したら「あなたの成績は${achievement}で${pass_or_failure}です」が出力される処理です。
-    return  ` Your grade is ${achievement}. It is a ${pass_or_failure}! ` ;
-  };
+        return judge;
+    //return pass_or_failure;
+};
+  // Create the final judge logic.
+  function judgement(){
+    // Assign "return value of get_achievement ()" to the variable "achievement".
+    let achievement = get_achievement();
+  // Substitute "return value of get_pass_or_failure ()" for variable "pass_or_failure".
+    let pass_or_failure = get_pass_or_failure();
+  // When you press the "Final Judge" (id = "alert-indicate)" button, "Your grade is $ {achievement} and $ {pass_or_failure}" is output.
+    $('#declaration').append(`<label id="alert-indicate" class="alert alert-info"> Your grade is ${achievement}. It is a ${pass_or_failure}</label>`);
+};
   // [国語の点数,英語の点数,数学の点数,理科の点数,社会の点数]のいずれかの点数が変更された際に「function score_indicate()」を発火させる処理です。
   $('#national_language, #english, #mathematics, #science, #society').change(function() {
     score_indicate();
   });
-  // 「ランク」(id="evaluation")ボタンを押したら「get_achievement()」が出力される処理です。
+  // 「ランク」(class="evaluation")ボタンを押したら「get_achievement()」が出力される処理です。
   $('#btn-evaluation').click(function() {
     $("#evaluation").text(get_achievement());
   });
-  // 「判定」(id="btn-judge")ボタンを押したら「function et_pass_or_failure()」が出力される処理です。
+  // 「判定」(class="btn-judge")ボタンを押したら「function et_pass_or_failure()」が出力される処理です。
     $('#btn-judge').click(function() {
     $("#judge").text(get_pass_or_failure());
   });
-  // 「最終ジャッジ」(id="btn-declaration")ボタンを押したら「function judgement()」が出力される処理です。
+  // 「最終ジャッジ」(class="btn-declaration")ボタンを押したら「function judgement()」が出力される処理です。
   $('#btn-declaration').click(function() {
+    $("#declaration").text(judgement());
   });
 });
 // ここに書かれているjsの記述はあくまでヒントとして用意された雛形なので、書かれている記述に従わずに実装したいという場合は、自分の好きに実装して構わない。課題要件を満たし、コードの品質が一定の水準にあると判定されればどのような実装でも合格になる。
